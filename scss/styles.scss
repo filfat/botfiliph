@@ -1,0 +1,25 @@
+@import './globals';
+
+html, body {
+    overflow-x: hidden;
+    padding: 0px; margin: 0px;
+
+    color: #000;
+
+    font-family: 'Open Sans', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+@import './components/chatbox';
+@import './components/header';
+@import './components/main';
+@import './components/userbox';
+@import './components/panel_layout';

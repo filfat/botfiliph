@@ -7,23 +7,36 @@ const CHANNEL = process.env.CHANNEL || '#filiphsandstrom';
 
 class BotBase {
     constructor () {
+        this.TOKEN      = TOKEN;
+        this.USERNAME   = USERNAME;
+        this.CLIENT_ID  = CLIENT_ID;
+        this.CHANNEL    = CHANNEL;
+
         this.state = {
             twitch_app: new Twitch({ token: TOKEN, username: USERNAME, clientId: CLIENT_ID }),
 
             chat: {
                 global_state: null,
                 channel_state: null,
-                log: [],
             },
 
-            commands: [
-                {
-                    id: "hi",
-                    handler: ({username}) => {
-                        twitch_app.chat.say(CHANNEL, `Howdy ${username}!`);
+            commands: [{
+                id: "commands",
+                aliases: ["help", '?'],
+                handler: (self, {username}) => {
+                    let output = '';
+                    for(let i = 0; i < self.state.commands.length; i++) {
+                        output += `"${self.state.commands[i].id}"${(i + 1) !== self.state.commands.length ? ", " : ''}`;
                     }
+
+                    self.state.twitch_app.chat.say(self.CHANNEL, `@${username} -> list of commands: [${output}]`);
                 }
-            ]
+            }],
+
+            log: {
+                messages: [],
+                users: [],
+            },
         };
 
         const self = this;
@@ -40,7 +53,7 @@ class BotBase {
             let type = "text";
             if(message.charAt(0) === '!') type = "command";
 
-            self.state.chat.log.push({
+            self.state.log.messages.push({
                 type,
                 username,
                 message,
@@ -49,6 +62,10 @@ class BotBase {
 
             if(type === "command")
                 self.handle_command({username, message, tags});
+        });
+
+        twitch_app.chat.on('JOIN', ({username, timestamp}) => {
+            self.state.log.users.push({timestamp, username});
         })
     }
 
@@ -56,20 +73,27 @@ class BotBase {
         let hits = 0;
         for (let i = 0; i < this.state.commands.length; i++) {
             const command = this.state.commands[i];
+            let hit = false;
+            
+            if (message.includes(command.id)) hit = true;
+            else if (command.aliases)
+                for (let i = 0; i < command.aliases.length; i++) {
+                    const alias = command.aliases[i];
+                    if(message.includes(alias)) hit = true;
+                }
 
-            // TODO: Loop thru aliases
-            if (message.includes(command.id)) {
+            if (hit) {
                 hits += 1;
 
-                if(command.handler) command.handler({username, message, tags});
+                if(command.handler) command.handler(this, {username, message, tags});
             }
         }
 
         if(!hits) this.state.twitch_app.chat.say(CHANNEL, `Unknown command "${message}"!`);
     }
 
-    register_command () {
-
+    register_command ({id, aliases, handler}) {
+        this.state.commands.push({id, aliases, handler});
     }
 }
 

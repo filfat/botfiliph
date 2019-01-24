@@ -1,0 +1,11 @@
+main {
+    max-width: $content-max-width;
+    min-height: calc(100vh - 50px); // TODO: remove footer height
+
+    margin: 0px auto;
+    padding: 25px 0px;
+
+    @media screen and (max-width: $content-max-width) {
+        padding: 15px;
+    }
+}

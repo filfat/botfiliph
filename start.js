@@ -1,5 +1,5 @@
-require('babel-register')({
-    presets: [ 'env' ]
+require("babel-register")({
+    presets: [ "env" ]
 })
 
-module.exports = require('./src/index.js')
+module.exports = require("./src/index.js")

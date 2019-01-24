@@ -1,0 +1,12 @@
+.PanelLayout {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+
+    .main {
+        width: 75%;
+    }
+    .side {
+        width: 25%;
+    }
+ }
