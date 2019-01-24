@@ -1,9 +1,17 @@
 import Twitch from "twitch-js";
+import XSS from "xss";
+import { EmoteFetcher, EmoteParser } from "twitch-emoticons";
+
+const fetcher = new EmoteFetcher();
+const parser = new EmoteParser(fetcher, {
+    type: 'markdown',
+    match: / (.+?) /g
+});
 
 const TOKEN = process.env.TWITCH_TOKEN || 'oauth:t9a5o0j4785recf07lj4r5n2i050ff';
 const USERNAME = process.env.TWITCH_USERNAME || 'fakebotnetisfake';
 const CLIENT_ID = process.env.TWITCH_CLIENT_ID || '9f38ppsn68skqoy5g60yg5i51erhg9';
-const CHANNEL = process.env.CHANNEL || '#filiphsandstrom';
+const CHANNEL = process.env.CHANNEL || 'filiphsandstrom';
 
 class BotBase {
     constructor () {
@@ -14,6 +22,12 @@ class BotBase {
 
         this.state = {
             twitch_app: new Twitch({ token: TOKEN, username: USERNAME, clientId: CLIENT_ID }),
+
+            emoticons: {
+                fetcher,
+                parser,
+                ready: false,
+            },
 
             chat: {
                 global_state: null,
@@ -56,17 +70,27 @@ class BotBase {
             self.state.log.messages.push({
                 type,
                 username,
-                message,
+                message: XSS(self.state.emoticons.parser.parse(message)),
                 tags,
             });
 
             if(type === "command")
-                self.handle_command({username, message, tags});
+                self.handle_command({username, message: XSS(message), tags});
         });
 
         twitch_app.chat.on('JOIN', ({username, timestamp}) => {
+            for (let i = 0; i < self.state.log.users.length; i++) {
+                let item = self.state.log.users[i];
+
+                if (item.username === username) return;
+            }
+
             self.state.log.users.push({timestamp, username});
-        })
+        });
+
+        self.state.emoticons.fetcher.fetchTwitchEmotes().then(() => {
+            self.state.emoticons.ready = true;
+        }).catch(err => console.log('', err));
     }
 
     handle_command ({username, message, tags}) {

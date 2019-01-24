@@ -26,9 +26,13 @@ bot_base.register_command({
     }
 });
 
-paths.handler(app, bot_base);
+paths(app, bot_base);
 app.listen(port, () => {
+    let ready_interval = setInterval(() => {
+        if(!bot_base.state.emoticons.ready) return;
+        
+        clearInterval(ready_interval);
+    });
 
-    // TODO: ehh
     console.info(`Bot started on port ${port}!`);
 })

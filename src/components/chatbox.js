@@ -1,3 +1,5 @@
+import uuid from "uuid/v4";
+
 export default (state) => {
     let output = '';
 
@@ -17,12 +19,20 @@ export default (state) => {
         `;
     }
 
+    let id = `ChatBox_${uuid()}`;
     return `
-        <div class="ChatBox">
+        <div id="${id}" class="ChatBox">
             <div class="details">
                 ${state.log.messages.length} Logged Messages
             </div>
-            ${output}
+            <div class="container">
+                ${output}
+            </div>
+            <script>
+                "use strict";
+                var converter = new showdown.Converter();
+                document.getElementById(${id}).innerHTML = converter.makeHtml(text);
+            </script>
         </div>
     `;
 }
