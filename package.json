@@ -7,6 +7,7 @@
     "start": "nodemon ./start.js"
   },
   "dependencies": {
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "node-sass-middleware": "^0.11.0",
     "twitch-emoticons": "^2.1.1",
@@ -15,8 +16,11 @@
     "xss": "^1.0.3"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "@babel/runtime": "^7.3.1",
     "nodemon": "^1.18.9"
   }
 }

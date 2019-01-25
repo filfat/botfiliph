@@ -1,4 +1,5 @@
 import path from "path";
+import env from "dotenv";
 
 import express from "express";
 import sassMiddleware from "node-sass-middleware";
@@ -6,6 +7,7 @@ import sassMiddleware from "node-sass-middleware";
 import bot_base from "./bot_base";
 import paths from "./paths";
 
+env.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -19,10 +21,16 @@ app.use(sassMiddleware({
 }));
 app.use('/public', express.static("public"))
 
-bot_base.register_command({
+bot_base.commands.register({
     id: "hi",
     handler: (self, {username}) => {
-        self.state.twitch_app.chat.say(self.CHANNEL, `Howdy @${username}!`);
+        self.messenger.send(`Howdy @${username}!`);
+    }
+});
+bot_base.commands.register({
+    id: "repo",
+    handler: (self, {username}) => {
+        self.messenger.send(`@${username} -> https://github.com/filfat/twitch-chat-bot`);
     }
 });
 

@@ -1,11 +1,11 @@
 import uuid from "uuid/v4";
 
-export default (state) => {
+export default (base) => {
     let output = '';
 
-    for (let i = 0; i < state.log.messages.length; i++) {
-        const message = state.log.messages[i];
-        if(message.type !== "text") continue;
+    let messages = base.messenger.get();
+    for (let i = 0; i < messages.length; i++) {
+        const message = messages[i];
 
         output += `
             <div class="chat-item">
@@ -23,7 +23,7 @@ export default (state) => {
     return `
         <div id="${id}" class="ChatBox">
             <div class="details">
-                ${state.log.messages.length} Logged Messages
+                ${messages.length} Logged Messages
             </div>
             <div class="container">
                 ${output}

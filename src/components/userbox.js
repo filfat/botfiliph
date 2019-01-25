@@ -1,8 +1,9 @@
-export default (state) => {
+export default (base) => {
     let output = '';
 
-    for (let i = 0; i < state.log.users.length; i++) {
-        const user = state.log.users[i];
+    const users = base.users.get();
+    for (let i = 0; i < users.length; i++) {
+        const user = users[i];
 
         output += `
             <div class="user-item">
@@ -16,7 +17,7 @@ export default (state) => {
     return `
         <div class="UserBox">
             <div class="details">
-                ${state.log.users.length} Logged Users
+                ${users.length} Logged Users
             </div>
             ${output}
         </div>

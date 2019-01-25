@@ -6,16 +6,16 @@ import userbox from "./components/userbox";
 import stream from "./components/stream";
 import panel_layout from "./components/panel_layout";
 
-export default (app, bot_base) => {
+export default (app, base) => {
     app.get('/', (req, res) => {
         res.send(html(null, `
             ${header()}
             ${main(`
                 ${panel_layout(`
-                    ${stream(bot_base)}
+                    ${stream(base)}
                 `, `
-                    ${chatbox(bot_base.state)}
-                    ${userbox(bot_base.state)}
+                    ${chatbox(base)}
+                    ${userbox(base)}
                 `)}
             `)}
         `));
