@@ -9,9 +9,12 @@ class BotCommands {
                 aliases: ["help", '?'],
                 handler: (self, {username}) => {
                     let output = '';
-                    for(let i = 0; i < self.state.commands.length; i++) {
-                        output += `"${self.state.commands[i].id}"${(i + 1) !== self.state.commands.length ? ", " : ''}`;
+
+                    let commands = self.commands.get();
+                    for(let i = 0; i < commands.length; i++) {
+                        output += `"${commands[i].id}"${(i + 1) !== commands.length ? ", " : ''}`;
                     }
+
                     self.messenger.send(`@${username} -> list of commands: [${output}]`);
                 }
             }],
@@ -30,6 +33,10 @@ class BotCommands {
 
             self.handle({username, message, tags});
         });
+    }
+
+    get () {
+        return this.state.commands;
     }
 
     handle ({username, message, tags}) {

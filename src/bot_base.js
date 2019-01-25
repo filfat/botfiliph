@@ -43,8 +43,6 @@ class BotBase {
                 global_state: null,
                 channel_state: null,
             },
-
-            commands: [],
         };
 
         this.messenger = new messenger(this.state.twitch_app.chat, {channel: this.CHANNEL});
