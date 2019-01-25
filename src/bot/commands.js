@@ -1,8 +1,10 @@
+import consola from "consola";
 class BotCommands {
     constructor (chat, base) {
         this.base = base;
         this.state = {
             commands: [{
+                // FIXME: use register instead
                 id: "commands",
                 aliases: ["help", '?'],
                 handler: (self, {username}) => {
@@ -10,7 +12,7 @@ class BotCommands {
                     for(let i = 0; i < self.state.commands.length; i++) {
                         output += `"${self.state.commands[i].id}"${(i + 1) !== self.state.commands.length ? ", " : ''}`;
                     }
-                    self.base.messenger.send(`@${username} -> list of commands: [${output}]`);
+                    self.messenger.send(`@${username} -> list of commands: [${output}]`);
                 }
             }],
             log: []
@@ -46,11 +48,11 @@ class BotCommands {
             if (hit) {
                 hits += 1;
 
-                if(command.handler) command.handler(this, {username, message, tags});
+                if(command.handler) command.handler(this.base, {username, message, tags});
             }
         }
 
-        if(!hits) this.base.messenger.send(`Unknown command "${message}"!`);
+        if(!hits) return consola.warn(`Unknown command "${message}"!`);
     }
 
     register ({id, aliases, handler}) {

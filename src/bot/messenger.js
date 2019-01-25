@@ -1,4 +1,6 @@
 import XSS from "xss";
+import consola from "consola";
+
 class BotMessenger {
     constructor(chat, {channel}) {
         this.chat = chat;
@@ -9,8 +11,13 @@ class BotMessenger {
     }
 
     async connect() {
-        let global_state = await this.chat.connect();
-        let channel_state = await this.chat.join(this.state.channel);
+        let global_state, channel_state;
+        try {
+            global_state = await this.chat.connect();
+            channel_state = await this.chat.join(this.state.channel);
+        } catch (ex) {
+            return consola.error(ex);
+        }
 
         let self = this;
         this.chat.on('PRIVMSG', ({username, message, tags}) => {

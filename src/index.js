@@ -1,11 +1,13 @@
 import path from "path";
 import env from "dotenv";
 
+import consola from "consola";
+
 import express from "express";
 import sassMiddleware from "node-sass-middleware";
 
 import bot_base from "./bot_base";
-import paths from "./paths";
+import router from "./router";
 
 env.config();
 const app = express();
@@ -22,25 +24,13 @@ app.use(sassMiddleware({
 app.use('/public', express.static("public"))
 
 bot_base.commands.register({
-    id: "hi",
-    handler: (self, {username}) => {
-        self.messenger.send(`Howdy @${username}!`);
-    }
-});
-bot_base.commands.register({
     id: "repo",
     handler: (self, {username}) => {
         self.messenger.send(`@${username} -> https://github.com/filfat/twitch-chat-bot`);
     }
 });
 
-paths(app, bot_base);
 app.listen(port, () => {
-    let ready_interval = setInterval(() => {
-        if(!bot_base.state.emoticons.ready) return;
-        
-        clearInterval(ready_interval);
-    });
-
-    console.info(`Bot started on port ${port}!`);
+    router(app, bot_base);
+    consola.info(`Bot started on port ${port}!`);
 })

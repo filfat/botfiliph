@@ -31,7 +31,7 @@ class BotBase {
         this.CHANNEL    = CHANNEL;
 
         this.state = {
-            twitch_app: new Twitch({ token: TOKEN, username: USERNAME, clientId: CLIENT_ID, log: {scope: null}}),
+            twitch_app: new Twitch({ token: TOKEN, username: USERNAME, clientId: CLIENT_ID, log: {level: 0} }),
 
             emoticons: {
                 fetcher,
