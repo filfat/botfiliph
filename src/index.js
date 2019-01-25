@@ -23,13 +23,6 @@ app.use(sassMiddleware({
 }));
 app.use('/public', express.static("public"))
 
-bot_base.commands.register({
-    id: "repo",
-    handler: (self, {username}) => {
-        self.messenger.send(`@${username} -> https://github.com/filfat/twitch-chat-bot`);
-    }
-});
-
 app.listen(port, () => {
     router(app, bot_base);
     consola.info(`Bot started on port ${port}!`);

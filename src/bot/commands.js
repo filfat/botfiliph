@@ -1,23 +1,11 @@
 import consola from "consola";
+import fs from "fs";
+
 class BotCommands {
     constructor (chat, base) {
         this.base = base;
         this.state = {
-            commands: [{
-                // FIXME: use register instead
-                id: "commands",
-                aliases: ["help", '?'],
-                handler: (self, {username}) => {
-                    let output = '';
-
-                    let commands = self.commands.get();
-                    for(let i = 0; i < commands.length; i++) {
-                        output += `"${commands[i].id}"${(i + 1) !== commands.length ? ", " : ''}`;
-                    }
-
-                    self.messenger.send(`@${username} -> list of commands: [${output}]`);
-                }
-            }],
+            commands: [],
             log: []
         };
 
@@ -32,6 +20,14 @@ class BotCommands {
             });
 
             self.handle({username, message, tags});
+        });
+
+
+        // Load default commands from commands directory
+        fs.readdirSync(__dirname + "/commands/").forEach((file) => {
+            self.register(require("./commands/" + file).default);
+
+            consola.info(`Bot->Commands->Loaded: "${file}"!`);
         });
     }
 
