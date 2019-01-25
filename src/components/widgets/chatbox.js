@@ -29,9 +29,9 @@ export default (base) => {
                 ${output}
             </div>
             <script>
-                "use strict";
-                var converter = new showdown.Converter();
-                document.getElementById(${id}).innerHTML = converter.makeHtml(text);
+                //"use strict";
+                //var converter = new showdown.Converter();
+                //document.getElementById("${id}").innerHTML = converter.makeHtml(text);
             </script>
         </div>
     `;
