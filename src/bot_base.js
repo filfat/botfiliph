@@ -1,3 +1,5 @@
+import consola from "consola";
+
 import env from "dotenv";
 import Twitch from "twitch-js";
 import XSS from "xss";
@@ -23,7 +25,7 @@ const CHANNEL = process.env.CHANNEL;
 
 class BotBase {
     constructor () {
-        if (!TOKEN || !USERNAME || !CLIENT_ID || !CHANNEL) throw new Error("Token, username, client_id & channel must be defined!");
+        if (!TOKEN || !USERNAME || !CLIENT_ID || !CHANNEL) consola.error("Token, username, client_id & channel must be defined!");
 
         this.TOKEN      = TOKEN;
         this.USERNAME   = USERNAME;

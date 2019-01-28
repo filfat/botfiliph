@@ -15,7 +15,7 @@ class BotCommands {
 
             self.state.log.push({
                 username,
-                message: message,
+                command: message,
                 tags,
             });
 
@@ -58,9 +58,9 @@ class BotCommands {
         if(!hits) return consola.warn(`Unknown command "${message}"!`);
     }
 
-    register ({id, aliases, handler}) {
+    register ({id, aliases, description, handler}) {
         // TODO: check args
-        this.state.commands.push({id, aliases, handler});
+        this.state.commands.push({id, aliases, description, handler});
     }
 }
 
